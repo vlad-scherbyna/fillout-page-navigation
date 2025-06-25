@@ -18,14 +18,14 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
       strategy={verticalListSortingStrategy}
     >
       {pages.map((page, idx) => (
-        <Fragment key={page.id}>
+        <div key={page.id}>
           <SortablePage
             page={page}
             isActive={page.id === activeId}
             onSelect={() => onSelect(page.id)}
           />
-          <InsertButton onClick={() => onInsertAt(idx)} />
-        </Fragment>
+          {/*<InsertButton onClick={() => onInsertAt(idx)} />*/}
+        </div>
       ))}
     </SortableContext>
   );

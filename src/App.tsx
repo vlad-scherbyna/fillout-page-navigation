@@ -1,4 +1,3 @@
-import './App.css'
 import { FormBuilder } from "@/components/form-builder";
 
 function App() {

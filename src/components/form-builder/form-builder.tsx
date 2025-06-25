@@ -31,7 +31,7 @@ export const FormBuilder = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="flex items-center gap-2">
       <DndContext onDragEnd={handleDragEnd}>
         <PageList
           pages={pages}

@@ -10,8 +10,8 @@ interface Props {
 }
 
 export const SortablePage = ({ page, isActive, onSelect }: Props) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: page.id });
-  const style = { transform: CSS.Transform.toString(transform), transition };
+  const { attributes, listeners, setNodeRef, transform } = useSortable({ id: page.id });
+  const style = { transform: CSS.Transform.toString(transform) };
 
   return (
     <div
@@ -19,7 +19,7 @@ export const SortablePage = ({ page, isActive, onSelect }: Props) => {
       style={style}
       {...attributes}
       {...listeners}
-      className={`flex items-center justify-between p-4 mb-2 bg-white rounded-xl shadow-sm transition 
+      className={`flex items-center justify-between p-4 mb-2 bg-white rounded-xl shadow-sm 
         ${isActive ? 'ring-2 ring-indigo-500' : 'hover:shadow-md'}`}
       onClick={onSelect}
     >
