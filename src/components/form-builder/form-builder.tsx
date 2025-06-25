@@ -1,4 +1,5 @@
-import { DndContext, type DragEndEvent } from '@dnd-kit/core';
+import { DndContext, type DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import { restrictToHorizontalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { reorder } from "@/utils/reorder";
@@ -14,14 +15,18 @@ export const FormBuilder = () => {
   ]);
   const [activeId, setActiveId] = useState(pages[0].id);
 
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
       setPages(prev => reorder(prev, active.id as string, over.id as string));
     }
   }
 
-  function handleInsertAt(idx: number) {
+  const handleInsertAt = (idx: number) => {
     const newPage: Page = { id: nanoid(), title: 'New Page' };
     setPages(prev => [
       ...prev.slice(0, idx + 1),
@@ -32,7 +37,7 @@ export const FormBuilder = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToHorizontalAxis, restrictToParentElement]}>
         <PageList
           pages={pages}
           activeId={activeId}

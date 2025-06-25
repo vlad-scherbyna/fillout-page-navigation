@@ -1,5 +1,4 @@
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Fragment } from 'react';
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortablePage } from './sortable-page';
 import { InsertButton } from './insert-button';
 import { Page } from "@/types/page";
@@ -15,17 +14,18 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
   return (
     <SortableContext
       items={pages.map(p => p.id)}
-      strategy={verticalListSortingStrategy}
+      strategy={horizontalListSortingStrategy}
     >
       {pages.map((page, idx) => (
-        <div key={page.id}>
+        <>
           <SortablePage
+            key={page.id}
             page={page}
             isActive={page.id === activeId}
             onSelect={() => onSelect(page.id)}
           />
           {/*<InsertButton onClick={() => onInsertAt(idx)} />*/}
-        </div>
+        </>
       ))}
     </SortableContext>
   );
