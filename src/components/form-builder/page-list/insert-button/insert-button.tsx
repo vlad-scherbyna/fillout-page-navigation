@@ -6,7 +6,7 @@ export const InsertButton = ({ onClick }: Props) => {
       onClick={onClick}
       className="w-full py-2 my-1 text-indigo-600 hover:bg-indigo-100 rounded-lg font-semibold transition"
     >
-      + Add Page
+      +
     </button>
   );
 }
