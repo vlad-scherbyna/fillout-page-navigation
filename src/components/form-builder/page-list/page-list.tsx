@@ -2,7 +2,7 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import { SortablePage } from './sortable-page/sortable-page';
 import { InsertButton } from './insert-button/insert-button';
 import { Page } from "@/types/page";
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDndContext } from '@dnd-kit/core';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,6 +16,33 @@ interface Props {
 export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
   const { active: isDragging } = useDndContext();
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleHover = (idx: number | null) => {
+    // clear prev timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // if cursor leaves zone hide button
+    if (idx === null) {
+      setHoverInsertIndex(null);
+      return;
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      setHoverInsertIndex(idx);
+    }, 300);
+  };
+
+  // Очищення таймера при розмонтуванні
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <SortableContext
@@ -44,8 +71,8 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
               <div
                 className="absolute right-0 top-0 bottom-0 h-full w-8 cursor-pointer z-10"
                 style={{ transform: 'translateX(100%)' }}
-                onMouseEnter={() => setHoverInsertIndex(idx + 1)}
-                onMouseLeave={() => setHoverInsertIndex(null)}
+                onMouseEnter={() => handleHover(idx + 1)}
+                onMouseLeave={() => handleHover(null)}
               >
                 <AnimatePresence>
                   {hoverInsertIndex === idx + 1 && (
@@ -54,7 +81,12 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
                       initial={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
                       animate={{ opacity: 1, scale: 1, y: "-50%", x: "-50%" }}
                       exit={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
-                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 500, 
+                        damping: 25,
+                        duration: 0.2
+                      }}
                     >
                       <InsertButton onClick={() => onInsertAt(idx + 1)} />
                     </motion.div>
