@@ -4,6 +4,7 @@ import { InsertButton } from './insert-button/insert-button';
 import { Page } from "@/types/page";
 import { useState } from 'react';
 import { useDndContext } from '@dnd-kit/core';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {
   pages: Page[];
@@ -23,7 +24,15 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
     >
       <div className="flex gap-5 items-center relative">
         {pages.map((page, idx) => (
-          <div key={page.id} className="relative">
+          <motion.div
+            key={page.id}
+            className="relative"
+            animate={{
+              marginRight: hoverInsertIndex === idx + 1 ? '0.5rem' : '0',
+              marginLeft: hoverInsertIndex === idx ? '0.5rem' : '0'
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
             <SortablePage
               page={page}
               isActive={page.id === activeId}
@@ -38,14 +47,22 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
                 onMouseEnter={() => setHoverInsertIndex(idx + 1)}
                 onMouseLeave={() => setHoverInsertIndex(null)}
               >
-                {hoverInsertIndex === idx + 1 && (
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <InsertButton onClick={() => onInsertAt(idx + 1)} />
-                  </div>
-                )}
+                <AnimatePresence>
+                  {hoverInsertIndex === idx + 1 && (
+                    <motion.div
+                      className="absolute top-1/2 left-1/2"
+                      initial={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
+                      animate={{ opacity: 1, scale: 1, y: "-50%", x: "-50%" }}
+                      exit={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
+                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                    >
+                      <InsertButton onClick={() => onInsertAt(idx + 1)} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
     </SortableContext>

@@ -13,16 +13,16 @@ export const FormBuilder = () => {
     { id: nanoid(), title: 'Other' },
     { id: nanoid(), title: 'Ending' },
   ]);
-  const [activeId, setActiveId] = useState(pages[0].id);
+  const [activeId, setActiveId] = useState<string>(pages[0].id);
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
+    setActiveId(event.active.id.toString());
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      setPages(prev => reorder(prev, active.id as string, over.id as string));
+      setPages(prev => reorder(prev, active.id.toString(), over.id.toString()));
     }
   }
 
