@@ -1,24 +1,20 @@
-import { useState } from 'react';
-import { ActionMenu } from './action-menu';
+import { ActionMenu } from './action-menu/action-menu';
 
-interface Props { title: string; }
+interface Props { 
+  title: string;
+  isActive?: boolean;
+}
 
-export const PageCard = ({ title }: Props) => {
-  // const [isHover, setHover] = useState(false);
-
+export const PageCard = ({ title, isActive = false }: Props) => {
   return (
-    <div
-      className="relative flex-1 p-2"
-      // onMouseEnter={() => setHover(true)}
-      // onMouseLeave={() => setHover(false)}
-    >
+    <div className="relative flex items-center justify-between w-full p-2">
       <h4 className="text-lg text-gray-900">{title}</h4>
-      {/*{isHover && (*/}
-      {/*  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">*/}
-      {/*    <button className="p-1 rounded-full hover:bg-gray-100 transition">+</button>*/}
-      {/*    <ActionMenu />*/}
-      {/*  </div>*/}
-      {/*)}*/}
+      
+      {isActive && (
+        <div className="ml-4 relative">
+          <ActionMenu />
+        </div>
+      )}
     </div>
   );
 }
