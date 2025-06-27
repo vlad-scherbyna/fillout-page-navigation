@@ -73,7 +73,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
               {/* insert button between pages */}
               {idx < pages.length - 1 && !isDragging && (
                 <div
-                  className="absolute right-0 top-0 bottom-0 h-full w-8 cursor-pointer z-10"
+                  className="absolute right-0 top-0 bottom-0 h-full w-[35px] cursor-pointer z-10"
                   style={{ transform: 'translateX(100%)' }}
                   onMouseEnter={() => handleHover(idx + 1)}
                   onMouseLeave={() => handleHover(null)}
