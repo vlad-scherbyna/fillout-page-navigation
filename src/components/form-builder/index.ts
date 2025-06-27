@@ -1,1 +1,1 @@
-export * from './form-builder.tsx';
+export * from './form-builder';

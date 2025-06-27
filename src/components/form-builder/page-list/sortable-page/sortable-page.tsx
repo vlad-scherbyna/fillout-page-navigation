@@ -18,8 +18,8 @@ export const SortablePage = ({ page, isActive, onSelect }: Props) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center justify-between p-4 mb-2 bg-white rounded-xl shadow-sm relative
-        ${isActive ? 'ring-2 ring-indigo-500' : 'hover:shadow-md'}`}
+      className={`flex items-center justify-between h-8 px-2.5 py-1 bg-gray-700/15 rounded-xl relative
+        ${isActive ? 'ring-2 ring-blue' : ''}`}
       onClick={onSelect}
       {...attributes}
       {...listeners}
