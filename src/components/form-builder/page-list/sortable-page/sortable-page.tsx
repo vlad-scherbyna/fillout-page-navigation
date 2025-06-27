@@ -10,12 +10,16 @@ const sortablePageVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gray-700/15 text-gray-600 hover:bg-gray-700/35 ',
+        default: 'bg-gray-700/15 text-gray-600 hover:bg-gray-700/35',
         active: 'color-dark bg-white border-[0.5px] border-gray-300 shadow-light',
       },
+      isDragging: {
+        true: 'z-50',
+      }
     },
     defaultVariants: {
       variant: 'default',
+      isDragging: false,
     },
   }
 );
@@ -27,16 +31,31 @@ interface Props extends Styles, VariantProps<typeof sortablePageVariants> {
 }
 
 export const SortablePage = ({ page, isActive, onSelect, variant, className }: Props) => {
-  const { attributes, listeners, setNodeRef, transform } = useSortable({ id: page.id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    isDragging
+  } = useSortable({ id: page.id });
+
   const translateX = transform?.x ?? 0;
   const translateY = transform?.y ?? 0;
-  const style = { transform: `translate3d(${translateX}px, ${translateY}px, 0)` };
+  const style = {
+    transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
+  };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={cn(sortablePageVariants({ variant }), className)}
+      className={cn(
+        sortablePageVariants({
+          variant,
+          isDragging 
+        }), 
+        className
+      )}
       onClick={onSelect}
       {...attributes}
       {...listeners}
