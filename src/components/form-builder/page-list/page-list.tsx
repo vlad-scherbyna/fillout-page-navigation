@@ -35,7 +35,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
     }, 300);
   };
 
-  // Очищення таймера при розмонтуванні
+  // clear timer on unmount
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {

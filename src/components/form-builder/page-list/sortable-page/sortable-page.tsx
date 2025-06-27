@@ -4,6 +4,7 @@ import { Page } from "@/types/page";
 import { PageCard } from "./page-card";
 import { cn } from '@/utils/markup';
 import { Styles } from "@/types/core";
+import { CSS } from "@dnd-kit/utilities";
 
 const sortablePageVariants = cva(
   'relative flex items-center justify-between h-8 text-sm font-medium rounded-lg transition-colors ease-in-out duration-300',
@@ -13,13 +14,10 @@ const sortablePageVariants = cva(
         default: 'bg-gray-700/15 text-gray-600 hover:bg-gray-700/35',
         active: 'color-dark bg-white border-[0.5px] border-gray-300 shadow-light',
       },
-      isDragging: {
-        true: 'z-50',
-      }
+
     },
     defaultVariants: {
       variant: 'default',
-      isDragging: false,
     },
   }
 );
@@ -36,13 +34,15 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
     listeners,
     setNodeRef,
     transform,
+    transition,
     isDragging
   } = useSortable({ id: page.id });
 
-  const translateX = transform?.x ?? 0;
-  const translateY = transform?.y ?? 0;
   const style = {
-    transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.7 : undefined,
+    zIndex: isDragging ? 50 : 1,
+    transition
   };
 
   return (
@@ -50,10 +50,7 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
       ref={setNodeRef}
       style={style}
       className={cn(
-        sortablePageVariants({
-          variant,
-          isDragging 
-        }), 
+        sortablePageVariants({ variant }),
         className
       )}
       onClick={onSelect}
