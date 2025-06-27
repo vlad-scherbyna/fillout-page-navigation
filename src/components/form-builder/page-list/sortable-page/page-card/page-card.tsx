@@ -7,11 +7,11 @@ interface Props {
 
 export const PageCard = ({ title, isActive = false }: Props) => {
   return (
-    <div className="relative flex items-center justify-between w-full p-2">
-      <h4 className="text-lg text-gray-900">{title}</h4>
+    <div className="relative flex gap-2 items-center justify-between w-full px-2.5 py-1">
+      <span>{title}</span>
       
       {isActive && (
-        <div className="ml-4 relative">
+        <div className="relative">
           <ActionMenu />
         </div>
       )}

@@ -10,8 +10,8 @@ export const ActionMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="p-1 rounded-md hover:bg-gray-100 transition">
-          <EllipsisVertical className="w-5 h-5 text-gray-600" />
+        <button className="p-1 outline-0 rounded-md hover:bg-gray-100 transition">
+          <EllipsisVertical className="w-4 h-4 text-gray-600" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
