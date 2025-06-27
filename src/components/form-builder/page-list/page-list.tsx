@@ -46,7 +46,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
 
   return (
     <SortableContext
-      items={pages.map(p => p.id)}
+      items={pages}
       strategy={horizontalListSortingStrategy}
     >
       <div className="flex gap-5 items-center relative">
