@@ -4,7 +4,7 @@ import { InsertButton } from '@/components/insert-button/insert-button';
 import { Page } from "@/types/page";
 import { useState, useRef, useEffect } from 'react';
 import { useDndContext } from '@dnd-kit/core';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { DashedLine } from "@/components/dashed-line";
 import { HorizontalScroll } from "@/components/horizontal-scroll";
 
@@ -16,8 +16,9 @@ interface Props {
 }
 
 export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
-  const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
   const { active: isDragging } = useDndContext();
+
+  const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleHover = (idx: number | null) => {
@@ -36,6 +37,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
       setHoverInsertIndex(idx);
     }, 300);
   };
+
 
   // clear timer on unmount
   useEffect(() => {
@@ -80,31 +82,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
 
                       {/* insert button between pages */}
                       {idx < pages.length - 1 && !isDragging && (
-                        <div
-                          className="absolute right-0 top-0 bottom-0 h-full w-[35px] cursor-pointer z-20"
-                          style={{ transform: 'translateX(100%)' }}
-                          onMouseEnter={() => handleHover(idx + 1)}
-                          onMouseLeave={() => handleHover(null)}
-                        >
-                          <AnimatePresence>
-                            {hoverInsertIndex === idx + 1 && (
-                              <motion.div
-                                className="absolute top-1/2 left-1/2"
-                                initial={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
-                                animate={{ opacity: 1, scale: 1, y: "-50%", x: "-50%" }}
-                                exit={{ opacity: 0, scale: 0.8, y: "-50%", x: "-50%" }}
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 500,
-                                  damping: 25,
-                                  duration: 0.2
-                                }}
-                              >
-                                <InsertButton onClick={() => onInsertAt(idx + 1)} />
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
+                        <InsertButton idx={idx} hoverInsertIndex={hoverInsertIndex} handleHover={handleHover} onClick={() => onInsertAt(idx + 1)}/>
                       )}
                     </motion.div>
                   )

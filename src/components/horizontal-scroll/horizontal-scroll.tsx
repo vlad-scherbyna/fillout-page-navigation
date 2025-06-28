@@ -1,5 +1,6 @@
 import { ReactNode, useRef, useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { useDndContext } from '@dnd-kit/core';
 
 interface HorizontalScrollProps {
   children: ReactNode;
@@ -10,6 +11,8 @@ export const HorizontalScroll = ({ children, className = '' }: HorizontalScrollP
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const { active: isDragging } = useDndContext();
 
   // scroll by offset
   const scrollByOffset = (offset: number) => {
@@ -22,16 +25,31 @@ export const HorizontalScroll = ({ children, className = '' }: HorizontalScrollP
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
+    
     const update = () => {
+      // Check if there's real overflow (content wider than container)
+      const hasRealOverflow = el.scrollWidth > el.clientWidth;
+      setHasOverflow(hasRealOverflow);
+      
       setCanScrollLeft(el.scrollLeft > 0);
       setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth);
     };
-    update();
+    
+    // Run update after full rendering
+    const timeoutId = setTimeout(update, 100);
+    
     el.addEventListener('scroll', update);
     window.addEventListener('resize', update);
+    
+    // Create ResizeObserver to track content size changes
+    const resizeObserver = new ResizeObserver(update);
+    resizeObserver.observe(el);
+    
     return () => {
+      clearTimeout(timeoutId);
       el.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      resizeObserver.disconnect();
     };
   }, [children]);
 
@@ -45,8 +63,8 @@ export const HorizontalScroll = ({ children, className = '' }: HorizontalScrollP
         {children}
       </div>
 
-      {/* Two arrows on the right, offset by -90px */}
-      {(canScrollLeft || canScrollRight) && (
+      {/* Show buttons only if there's overflow and no active dragging */}
+      {hasOverflow && !isDragging && (canScrollLeft || canScrollRight) && (
         <div className="absolute right-[-90px] top-1/2 transform -translate-y-1/2 flex space-x-2 z-20">
           <button
             onClick={() => scrollByOffset(-150)}
