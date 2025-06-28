@@ -7,7 +7,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { ActionMenu } from "src/components/action-menu";
 
 const sortablePageVariants = cva(
-  'relative flex items-center justify-between h-8 text-sm font-medium rounded-lg transition-colors ease-in-out duration-300',
+  'relative flex gap-2 items-center justify-between h-8 text-sm font-medium rounded-lg w-full px-2.5 py-1 rounded-lg transition ease-in-out duration-300',
   {
     variants: {
       variant: {
@@ -23,7 +23,7 @@ const sortablePageVariants = cva(
 );
 
 const iconsVariants = cva(
-  'text-gray-500',
+  'text-gray-500 transition ease-in-out duration-300',
   {
     variants: {
       variant: {
@@ -67,15 +67,11 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
     <div
       ref={setNodeRef}
       style={style}
-      className={cn(
-        sortablePageVariants({ variant }),
-        className
-      )}
       onClick={onSelect}
       {...attributes}
       {...listeners}
     >
-      <div className="relative flex gap-2 items-center justify-between w-full px-2.5 py-1">
+      <div className={cn(sortablePageVariants({ variant }), className)} >
         <Icon className={iconsVariants({ variant })} />
         <div>{page.title}</div>
 
