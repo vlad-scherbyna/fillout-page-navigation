@@ -49,7 +49,7 @@ export const ActionMenu = ({ className = '' }: ActionMenuProps) => {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="top-start">
+    <Menu open={isMenuOpen} handler={setIsMenuOpen} offset={8} placement="top">
       <MenuHandler>
         <Button
           {...({} as MTButtonProps)}
