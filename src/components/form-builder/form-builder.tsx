@@ -23,23 +23,33 @@ export const FormBuilder = () => {
     }
   }
 
-  const handleInsertAt = (idx: number) => {
-    const newPage: Page = { id: nanoid(), title: 'New Page', icon: DocumentIcon };
+  // Unified function to add a page at any position
+  const handleInsertPage = (idx: number) => {
+    const newPageId = nanoid();
+    const newPage: Page = { id: newPageId, title: 'New Page', icon: DocumentIcon };
+    
     setPages(prev => [
       ...prev.slice(0, idx),
       newPage,
       ...prev.slice(idx),
     ]);
+    
+    // Set the new page as active
+    setActiveId(newPageId);
   }
 
   return (
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}>
-        <PageList
-          pages={pages}
-          activeId={activeId}
-          onSelect={setActiveId}
-          onInsertAt={handleInsertAt}
-        />
-      </DndContext>
+    <DndContext 
+      onDragStart={handleDragStart} 
+      onDragEnd={handleDragEnd} 
+      modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}
+    >
+      <PageList
+        pages={pages}
+        activeId={activeId}
+        onSelect={setActiveId}
+        onInsertPage={handleInsertPage}
+      />
+    </DndContext>
   );
 }

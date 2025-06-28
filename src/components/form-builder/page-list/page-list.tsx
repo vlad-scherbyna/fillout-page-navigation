@@ -12,10 +12,10 @@ interface Props {
   pages: Page[];
   activeId: string;
   onSelect(id: string): void;
-  onInsertAt(idx: number): void;
+  onInsertPage(idx: number): void;
 }
 
-export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
+export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => {
   const { active: isDragging } = useDndContext();
 
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
@@ -82,7 +82,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertAt }: Props) => {
 
                       {/* insert button between pages */}
                       {idx < pages.length - 1 && !isDragging && (
-                        <InsertButton idx={idx} hoverInsertIndex={hoverInsertIndex} handleHover={handleHover} onClick={() => onInsertAt(idx + 1)}/>
+                        <InsertButton idx={idx} hoverInsertIndex={hoverInsertIndex} handleHover={handleHover} onClick={() => onInsertPage(idx + 1)}/>
                       )}
                     </motion.div>
                   )

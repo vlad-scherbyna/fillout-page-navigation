@@ -56,7 +56,6 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.7 : undefined,
     zIndex: isDragging ? 50 : 1,
     transition
   };
