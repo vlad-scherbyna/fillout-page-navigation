@@ -5,14 +5,11 @@ import { nanoid } from 'nanoid';
 import { reorder } from "@/utils/reorder";
 import { PageList } from "src/components/form-builder/page-list";
 import { Page } from "@/types/page";
+import { pagesMock } from "@/mocks/pages";
+import DocumentIcon from '@/assets/icons/document.svg?react';
 
 export const FormBuilder = () => {
-  const [pages, setPages] = useState<Page[]>([
-    { id: nanoid(), title: 'Info' },
-    { id: nanoid(), title: 'Details' },
-    { id: nanoid(), title: 'Other' },
-    { id: nanoid(), title: 'Ending' },
-  ]);
+  const [pages, setPages] = useState<Page[]>(pagesMock);
   const [activeId, setActiveId] = useState<string>(pages[0].id);
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -27,7 +24,7 @@ export const FormBuilder = () => {
   }
 
   const handleInsertAt = (idx: number) => {
-    const newPage: Page = { id: nanoid(), title: 'New Page' };
+    const newPage: Page = { id: nanoid(), title: 'New Page', icon: DocumentIcon };
     setPages(prev => [
       ...prev.slice(0, idx),
       newPage,

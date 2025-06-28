@@ -1,6 +1,6 @@
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortablePage } from './sortable-page/sortable-page';
-import { InsertButton } from './insert-button/insert-button';
+import { InsertButton } from '@/components/insert-button/insert-button';
 import { Page } from "@/types/page";
 import { useState, useRef, useEffect } from 'react';
 import { useDndContext } from '@dnd-kit/core';
