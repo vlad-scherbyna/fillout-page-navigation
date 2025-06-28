@@ -74,11 +74,7 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
         <Icon className={iconsVariants({ variant })} />
         <div>{page.title}</div>
 
-        {isActive && (
-          <div className="relative">
-            <ActionMenu />
-          </div>
-        )}
+        {isActive && (<ActionMenu />)}
       </div>
     </div>
   );
