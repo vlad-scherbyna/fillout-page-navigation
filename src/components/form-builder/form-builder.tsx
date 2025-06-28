@@ -1,5 +1,5 @@
 import { DndContext, type DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { reorder } from "@/utils/reorder";
@@ -33,7 +33,7 @@ export const FormBuilder = () => {
   }
 
   return (
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToHorizontalAxis]}>
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}>
         <PageList
           pages={pages}
           activeId={activeId}
