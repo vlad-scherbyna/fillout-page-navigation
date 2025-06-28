@@ -11,7 +11,7 @@ const sortablePageVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gray-700/15 text-gray-600 hover:bg-gray-700/35',
+        default: 'bg-gray-550 text-gray-600 hover:bg-gray-650',
         active: 'color-dark bg-white border-[0.5px] border-gray-300 shadow-light',
       },
 

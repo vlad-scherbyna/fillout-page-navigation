@@ -14,7 +14,9 @@ export default {
           300: '#E1E1E1',
           400: '#C0C0C0',
           500: '#8C93A1',
+          550: '#EBEDF0',  // bg-gray-700/15, do not use opacity with hashed line
           600: '#677289',
+          650: '#D7DAE0',  // bg-gray-700/35, do not use opacity with hashed line
           700: '#9DA4B2',
         },
         dark: '#1A1A1A',
