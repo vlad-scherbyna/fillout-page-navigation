@@ -7,12 +7,13 @@ import { CSS } from "@dnd-kit/utilities";
 import { ActionMenu } from "src/components/action-menu";
 
 const sortablePageVariants = cva(
-  'relative flex gap-2 items-center justify-between h-8 text-sm font-medium rounded-lg w-full px-2.5 py-1 rounded-lg transition ease-in-out duration-300',
+  'relative flex gap-2 items-center justify-between h-8 text-sm font-medium rounded-lg w-full px-2.5 py-1 rounded-lg transition ease-in-out duration-300 cursor-pointer',
   {
     variants: {
       variant: {
         default: 'bg-gray-550 text-gray-600 hover:bg-gray-650',
         active: 'color-dark bg-white border-[0.5px] border-gray-300 shadow-light',
+        addButton: 'color-dark bg-white border-[0.5px] border-gray-300 shadow-light',
       },
 
     },
@@ -23,12 +24,13 @@ const sortablePageVariants = cva(
 );
 
 const iconsVariants = cva(
-  'text-gray-500 transition ease-in-out duration-300',
+  'transition ease-in-out duration-300',
   {
     variants: {
       variant: {
-        default: '',
-        active: 'text-yellow',
+        default: 'size-5 text-gray-500',
+        active: 'text-yellow size-5',
+        addButton: 'size-4 text-dark',
       },
 
     },
@@ -52,7 +54,10 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
     transform,
     transition,
     isDragging
-  } = useSortable({ id: page.id });
+  } = useSortable({ 
+    id: page.id,
+    disabled: page.isSortable === false
+  });
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -61,20 +66,27 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
   };
 
   const Icon = page?.icon;
+  const handleClick = () => {
+    if (page.onClick) {
+      page.onClick();
+    } else {
+      onSelect();
+    }
+  };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      onClick={onSelect}
-      {...attributes}
-      {...listeners}
+      onClick={handleClick}
+      {...(page.isSortable === false ? {} : attributes)}
+      {...(page.isSortable === false ? {} : listeners)}
     >
       <div className={cn(sortablePageVariants({ variant }), className)} >
         <Icon className={iconsVariants({ variant })} />
         <div>{page.title}</div>
 
-        {isActive && (<ActionMenu />)}
+        {isActive && page.isSortable !== false && (<ActionMenu />)}
       </div>
     </div>
   );

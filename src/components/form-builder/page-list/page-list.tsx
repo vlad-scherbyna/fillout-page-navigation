@@ -7,6 +7,7 @@ import { useDndContext } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { DashedLine } from "@/components/dashed-line";
 import { HorizontalScroll } from "@/components/horizontal-scroll";
+import { ADD_PAGE_ID } from "@/mocks/pages";
 
 interface Props {
   pages: Page[];
@@ -20,6 +21,9 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
 
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Відфільтруємо сторінки для SortableContext, щоб виключити ті, що не сортуються
+  const sortablePages = pages.filter(page => page.isSortable !== false);
 
   const handleHover = (idx: number | null) => {
     // clear prev timer
@@ -55,13 +59,13 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
           {/* key updates DashedLine length after add delete pages */}
           <DashedLine key={pages.length} />
           <SortableContext
-            items={pages}
+            items={sortablePages}
             strategy={horizontalListSortingStrategy}
-
           >
               <div className="flex gap-5 items-center relative z-10">
                 {pages.map((page, idx) => {
                   const isActive = page.id === activeId;
+                  const isAddButton = page.id === ADD_PAGE_ID;
 
                   return (
                     <motion.div
@@ -75,7 +79,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
                     >
                       <SortablePage
                         page={page}
-                        variant={isActive ? 'active' : 'default'}
+                        variant={isAddButton ? 'addButton' : (isActive ? 'active' : 'default')}
                         isActive={isActive}
                         onSelect={() => onSelect(page.id)}
                       />
