@@ -58,7 +58,7 @@ export const FormBuilder = () => {
   return (
     <DndContext 
       onDragStart={handleDragStart} 
-      onDragEnd={handleDragEnd} 
+      onDragEnd={handleDragEnd}
       modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}
     >
       <PageList

@@ -22,7 +22,6 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
 
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const sortablePages = pages.filter(page => page.isSortable !== false);
 
   const handleAddPage = () => {
     onInsertPage(pages.length - 1);
@@ -62,7 +61,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
           {/* key updates DashedLine length after add delete pages */}
           <DashedLine key={pages.length} />
           <SortableContext
-            items={sortablePages}
+            items={pages}
             strategy={horizontalListSortingStrategy}
           >
               <div className="flex gap-5 items-center relative z-10">
@@ -71,7 +70,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
                   const isAddButton = page.id === ADD_PAGE_ID;
 
                   return (
-                    <div className='relative'>
+                    <div key={page.id} className='relative'>
                       <motion.div
                         animate={{
                           marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
