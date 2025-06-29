@@ -11,7 +11,7 @@ interface Props {
 export const InsertButton = ({ idx, hoverInsertIndex, handleHover, onClick }: Props) => {
   return (
     <div
-      className="absolute right-0 top-0 bottom-0 h-full w-[35px] cursor-pointer z-20"
+      className="absolute right-0 top-0 bottom-0 h-full w-5 cursor-pointer z-20"
       style={{transform: 'translateX(100%)'}}
       onMouseEnter={() => handleHover(idx + 1)}
       onMouseLeave={() => handleHover(null)}

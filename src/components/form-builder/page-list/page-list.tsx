@@ -20,9 +20,8 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
   const { active: isDragging } = useDndContext();
 
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Відфільтруємо сторінки для SortableContext, щоб виключити ті, що не сортуються
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const sortablePages = pages.filter(page => page.isSortable !== false);
 
   const handleHover = (idx: number | null) => {
@@ -68,27 +67,27 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
                   const isAddButton = page.id === ADD_PAGE_ID;
 
                   return (
-                    <motion.div
-                      key={page.id}
-                      className="relative"
-                      animate={{
-                        marginRight: hoverInsertIndex === idx + 1 ? '0.5rem' : '0',
-                        marginLeft: hoverInsertIndex === idx ? '0.5rem' : '0'
-                      }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    >
-                      <SortablePage
-                        page={page}
-                        variant={isAddButton ? 'addButton' : (isActive ? 'active' : 'default')}
-                        isActive={isActive}
-                        onSelect={() => onSelect(page.id)}
-                      />
-
+                    <div className='relative'>
+                      <motion.div
+                        key={page.id}
+                        animate={{
+                          marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
+                          marginLeft: hoverInsertIndex === idx ? '1rem' : '0'
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      >
+                        <SortablePage
+                          page={page}
+                          variant={isAddButton ? 'addButton' : (isActive ? 'active' : 'default')}
+                          isActive={isActive}
+                          onSelect={() => onSelect(page.id)}
+                        />
+                      </motion.div>
                       {/* insert button between pages */}
                       {idx < pages.length - 1 && !isDragging && (
                         <InsertButton idx={idx} hoverInsertIndex={hoverInsertIndex} handleHover={handleHover} onClick={() => onInsertPage(idx + 1)}/>
                       )}
-                    </motion.div>
+                    </div>
                   )
                 })}
               </div>
