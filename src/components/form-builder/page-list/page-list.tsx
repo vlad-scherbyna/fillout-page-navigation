@@ -24,6 +24,10 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const sortablePages = pages.filter(page => page.isSortable !== false);
 
+  const handleAddPage = () => {
+    onInsertPage(pages.length - 1);
+  };
+
   const handleHover = (idx: number | null) => {
     // clear prev timer
     if (debounceTimerRef.current) {
@@ -79,7 +83,7 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
                           page={page}
                           variant={isAddButton ? 'addButton' : (isActive ? 'active' : 'default')}
                           isActive={isActive}
-                          onSelect={() => onSelect(page.id)}
+                          onSelect={isAddButton ? () => handleAddPage() : () => onSelect(page.id)}
                         />
                       </motion.div>
                       {/* insert button between pages */}
