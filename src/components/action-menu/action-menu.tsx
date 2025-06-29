@@ -114,7 +114,7 @@ export const ActionMenu = ({ className = "" }: { className?: string }) => {
           <ActionMenuItem
             icon={DeleteIcon}
             iconColor="text-red"
-            className="hover:bg-red-100"
+            className="text-red"
             onClick={closeMenu}
           >
             Delete
