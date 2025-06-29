@@ -69,7 +69,6 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
                   return (
                     <div className='relative'>
                       <motion.div
-                        key={page.id}
                         animate={{
                           marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
                           marginLeft: hoverInsertIndex === idx ? '1rem' : '0'

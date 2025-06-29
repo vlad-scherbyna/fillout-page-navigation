@@ -58,7 +58,7 @@ export const HorizontalScroll = ({ children, className = '' }: HorizontalScrollP
       {/* Scrollable content */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-scroll no-scrollbar scroll-smooth space-x-5"
+        className="flex p-1 overflow-x-scroll no-scrollbar scroll-smooth space-x-5"
       >
         {children}
       </div>
