@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 import { reorder } from "@/utils/reorder";
 import { PageList } from "src/components/form-builder/page-list";
 import { Page } from "@/types/page";
-import { pagesMock } from "@/mocks/pages";
+import { pagesMock, addPageButton } from "@/mocks/pages";
 import DocumentIcon from '@/assets/icons/document.svg?react';
 
 export const FormBuilder = () => {
@@ -14,10 +14,6 @@ export const FormBuilder = () => {
 
   const handleDragStart = (event: DragStartEvent) => {
     const id = event.active.id.toString();
-    // check if its not add button
-    const page = pages.find(p => p.id === id);
-    if (page?.isSortable === false) return;
-    
     setActiveId(id);
   }
 
@@ -28,12 +24,6 @@ export const FormBuilder = () => {
     
     const activeId = active.id.toString();
     const overId = over.id.toString();
-    
-    // check if its not add button
-    const activePage = pages.find(p => p.id === activeId);
-    const overPage = pages.find(p => p.id === overId);
-    
-    if (activePage?.isSortable === false || overPage?.isSortable === false) return;
     
     if (activeId !== overId) {
       setPages(prev => reorder(prev, activeId, overId));
@@ -54,6 +44,10 @@ export const FormBuilder = () => {
     // Set the new page as active
     setActiveId(newPageId);
   }
+  
+  const handleAddPage = () => {
+    handleInsertPage(pages.length);
+  };
 
   return (
     <DndContext 
@@ -63,6 +57,7 @@ export const FormBuilder = () => {
     >
       <PageList
         pages={pages}
+        addButton={{...addPageButton, onClick: handleAddPage}}
         activeId={activeId}
         onSelect={setActiveId}
         onInsertPage={handleInsertPage}

@@ -20,5 +20,4 @@ export const pagesMock: Page[] = [
   { id: nanoid(), title: 'Details', icon: DocumentIcon },
   { id: nanoid(), title: 'Other', icon: DocumentIcon },
   { id: nanoid(), title: 'Ending', icon: CircleCheckIcon },
-  addPageButton,
 ];

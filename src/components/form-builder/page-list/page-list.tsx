@@ -7,25 +7,20 @@ import { useDndContext } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { DashedLine } from "@/components/dashed-line";
 import { HorizontalScroll } from "@/components/horizontal-scroll";
-import { ADD_PAGE_ID } from "@/mocks/pages";
 
 interface Props {
   pages: Page[];
+  addButton: Page;
   activeId: string;
   onSelect(id: string): void;
   onInsertPage(idx: number): void;
 }
 
-export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => {
+export const PageList = ({ pages, addButton, activeId, onSelect, onInsertPage }: Props) => {
   const { active: isDragging } = useDndContext();
 
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
-
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleAddPage = () => {
-    onInsertPage(pages.length - 1);
-  };
 
   const handleHover = (idx: number | null) => {
     // clear prev timer
@@ -44,7 +39,6 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
     }, 300);
   };
 
-
   // clear timer on unmount
   useEffect(() => {
     return () => {
@@ -60,40 +54,54 @@ export const PageList = ({ pages, activeId, onSelect, onInsertPage }: Props) => 
         <div className="relative min-w-max">
           {/* key updates DashedLine length after add delete pages */}
           <DashedLine key={pages.length} />
-          <SortableContext
-            items={pages}
-            strategy={horizontalListSortingStrategy}
-          >
-              <div className="flex gap-5 items-center relative z-10">
-                {pages.map((page, idx) => {
-                  const isActive = page.id === activeId;
-                  const isAddButton = page.id === ADD_PAGE_ID;
+          <div className="flex gap-5 items-center relative z-10">
+            <SortableContext
+              items={pages}
+              strategy={horizontalListSortingStrategy}
+            >
+              {pages.map((page, idx) => {
+                const isActive = page.id === activeId;
 
-                  return (
-                    <div key={page.id} className='relative'>
-                      <motion.div
-                        animate={{
-                          marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
-                          marginLeft: hoverInsertIndex === idx ? '1rem' : '0'
-                        }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      >
-                        <SortablePage
-                          page={page}
-                          variant={isAddButton ? 'addButton' : (isActive ? 'active' : 'default')}
-                          isActive={isActive}
-                          onSelect={isAddButton ? () => handleAddPage() : () => onSelect(page.id)}
-                        />
-                      </motion.div>
-                      {/* insert button between pages */}
-                      {idx < pages.length - 1 && !isDragging && (
-                        <InsertButton idx={idx} hoverInsertIndex={hoverInsertIndex} handleHover={handleHover} onClick={() => onInsertPage(idx + 1)}/>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-          </SortableContext>
+                return (
+                  <div key={page.id} className='relative'>
+                    <motion.div
+                      animate={{
+                        marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
+                        marginLeft: hoverInsertIndex === idx ? '1rem' : '0'
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    >
+                      <SortablePage
+                        page={page}
+                        variant={isActive ? 'active' : 'default'}
+                        isActive={isActive}
+                        onSelect={() => onSelect(page.id)}
+                      />
+                    </motion.div>
+                    {/* insert button between pages */}
+                    {idx < pages.length - 1 && !isDragging && (
+                      <InsertButton 
+                        idx={idx} 
+                        hoverInsertIndex={hoverInsertIndex} 
+                        handleHover={handleHover} 
+                        onClick={() => onInsertPage(idx + 1)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </SortableContext>
+            
+            {/* Add button - outside of SortableContext */}
+            <div className='relative'>
+              <SortablePage
+                page={addButton}
+                variant='addButton'
+                isActive={false}
+                onSelect={() => addButton.onClick && addButton.onClick()}
+              />
+            </div>
+          </div>
         </div>
       </HorizontalScroll>
     </div>
