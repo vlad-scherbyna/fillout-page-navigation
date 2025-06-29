@@ -2,11 +2,15 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import { SortablePage } from './sortable-page/sortable-page';
 import { InsertButton } from '@/components/insert-button/insert-button';
 import { Page } from "@/types/page";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useDndContext } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { DashedLine } from "@/components/dashed-line";
 import { HorizontalScroll } from "@/components/horizontal-scroll";
+
+const HOVER_DELAY_MS = 300;
+const MARGIN_SIZE = '1rem';
+const ANIMATION_CONFIG = { type: "spring", stiffness: 300, damping: 30 };
 
 interface Props {
   pages: Page[];
@@ -22,7 +26,13 @@ export const PageList = ({ pages, addButton, activeId, onSelect, onInsertPage }:
   const [hoverInsertIndex, setHoverInsertIndex] = useState<number | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleHover = (idx: number | null) => {
+  const handleAddButtonClick = useCallback(() => {
+    if (addButton.onClick) {
+      addButton.onClick();
+    }
+  }, [addButton]);
+
+  const handleHover = useCallback((idx: number | null) => {
     // clear prev timer
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
@@ -36,8 +46,8 @@ export const PageList = ({ pages, addButton, activeId, onSelect, onInsertPage }:
 
     debounceTimerRef.current = setTimeout(() => {
       setHoverInsertIndex(idx);
-    }, 300);
-  };
+    }, HOVER_DELAY_MS);
+  }, []);
 
   // clear timer on unmount
   useEffect(() => {
@@ -66,10 +76,10 @@ export const PageList = ({ pages, addButton, activeId, onSelect, onInsertPage }:
                   <div key={page.id} className='relative'>
                     <motion.div
                       animate={{
-                        marginRight: hoverInsertIndex === idx + 1 ? '1rem' : '0',
-                        marginLeft: hoverInsertIndex === idx ? '1rem' : '0'
+                        marginRight: hoverInsertIndex === idx + 1 ? MARGIN_SIZE : '0',
+                        marginLeft: hoverInsertIndex === idx ? MARGIN_SIZE : '0'
                       }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      transition={ANIMATION_CONFIG}
                     >
                       <SortablePage
                         page={page}
@@ -92,13 +102,13 @@ export const PageList = ({ pages, addButton, activeId, onSelect, onInsertPage }:
               })}
             </SortableContext>
             
-            {/* Add button - outside of SortableContext */}
+            {/* Add button - outside SortableContext */}
             <div className='relative'>
               <SortablePage
                 page={addButton}
                 variant='addButton'
                 isActive={false}
-                onSelect={() => addButton.onClick && addButton.onClick()}
+                onSelect={handleAddButtonClick}
               />
             </div>
           </div>

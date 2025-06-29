@@ -5,6 +5,7 @@ import { cn } from '@/utils/markup';
 import { Styles } from "@/types/core";
 import { CSS } from "@dnd-kit/utilities";
 import { ActionMenu } from "src/components/action-menu";
+import { memo } from 'react';
 
 const sortablePageVariants = cva(
   'relative flex gap-2 items-center justify-between h-8 text-sm font-medium rounded-lg w-full px-2.5 py-1 rounded-lg transition ease-in-out duration-300 cursor-pointer',
@@ -46,7 +47,7 @@ interface Props extends Styles, VariantProps<typeof sortablePageVariants> {
   onSelect(): void;
 }
 
-export const SortablePage = ({ page, isActive, onSelect, variant, className }: Props) => {
+const SortablePageComponent = ({ page, isActive, onSelect, variant, className }: Props) => {
   const {
     attributes,
     listeners,
@@ -90,4 +91,6 @@ export const SortablePage = ({ page, isActive, onSelect, variant, className }: P
       </div>
     </div>
   );
-}
+};
+
+export const SortablePage = memo(SortablePageComponent);

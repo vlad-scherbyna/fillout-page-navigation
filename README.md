@@ -1,69 +1,90 @@
-# React + TypeScript + Vite
+# Fillout Form Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern form builder with drag-and-drop page reordering capabilities.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Drag and drop page reordering using DnD Kit
+- Dynamic page addition
+- Optimized components with React.memo
+- Responsive design
+- TypeScript support
 
-## Expanding the ESLint configuration
+## Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19
+- TypeScript
+- DnD Kit for drag and drop functionality
+- Framer Motion for animations
+- Tailwind CSS for styling
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Project Structure
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── assets/
+│   └── icons/           # SVG icons
+├── components/
+│   ├── action-menu/     # Action menu for pages
+│   ├── dashed-line/     # Dashed line component
+│   ├── form-builder/    # Main form builder component
+│   │   ├── page-list/   # List of pages
+│   │   │   └── sortable-page/ # Draggable page component
+│   ├── horizontal-scroll/ # Horizontal scroll component
+│   └── insert-button/   # Button for inserting new pages
+├── context/             # React context providers
+├── mocks/               # Mock data
+├── types/               # TypeScript types
+└── utils/               # Utility functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Components
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### FormBuilder
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Main component that manages page state and drag-and-drop functionality.
+
+### PageList
+
+Displays a list of pages with drag-and-drop and page addition capabilities.
+
+### SortablePage
+
+Draggable page component optimized with React.memo.
+
+### InsertButton
+
+Button for inserting new pages between existing ones.
+
+## Optimizations
+
+- React.memo for preventing unnecessary re-renders
+- useCallback for memoizing event handlers
+- useMemo for memoizing computed values
+- Constants to avoid "magic numbers" in code
+- Error handling and edge cases management
+
+## Running the Project
+
+```bash
+# Install dependencies
+npm install
+
+# Run in development mode
+npm run dev
+
+# Build for production
+npm run build
 ```
+
+## Extending the Project
+
+The project has a modular structure that makes it easy to add new features:
+
+1. Adding new page types
+2. Extending drag-and-drop functionality
+3. Adding new actions for pages
+
+## License
+
+MIT

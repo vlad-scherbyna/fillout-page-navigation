@@ -7,7 +7,7 @@ interface HorizontalScrollProps {
   className?: string;
 }
 
-export const HorizontalScroll = ({ children, className = '' }: HorizontalScrollProps) => {
+export const HorizontalScroll = ({ children, className }: HorizontalScrollProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);

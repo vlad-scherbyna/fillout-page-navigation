@@ -1,23 +1,25 @@
 import { DndContext, type DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from "@dnd-kit/modifiers";
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { reorder } from "@/utils/reorder";
+import { useCallback } from 'react';
 import { PageList } from "src/components/form-builder/page-list";
-import { Page } from "@/types/page";
-import { pagesMock, addPageButton } from "@/mocks/pages";
-import DocumentIcon from '@/assets/icons/document.svg?react';
+import { useFormBuilder } from '@/context/form-builder-context';
 
 export const FormBuilder = () => {
-  const [pages, setPages] = useState<Page[]>(pagesMock);
-  const [activeId, setActiveId] = useState<string>(pages[0].id);
+  const { 
+    pages, 
+    activeId, 
+    addButton, 
+    setActiveId, 
+    handleInsertPage, 
+    handleReorderPages 
+  } = useFormBuilder();
 
-  const handleDragStart = (event: DragStartEvent) => {
+  const handleDragStart = useCallback((event: DragStartEvent) => {
     const id = event.active.id.toString();
     setActiveId(id);
-  }
+  }, [setActiveId]);
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     
     if (!over) return;
@@ -25,29 +27,8 @@ export const FormBuilder = () => {
     const activeId = active.id.toString();
     const overId = over.id.toString();
     
-    if (activeId !== overId) {
-      setPages(prev => reorder(prev, activeId, overId));
-    }
-  }
-
-  // Unified function to add a page at any position
-  const handleInsertPage = (idx: number) => {
-    const newPageId = nanoid();
-    const newPage: Page = { id: newPageId, title: 'New Page', icon: DocumentIcon };
-    
-    setPages(prev => [
-      ...prev.slice(0, idx),
-      newPage,
-      ...prev.slice(idx),
-    ]);
-    
-    // Set the new page as active
-    setActiveId(newPageId);
-  }
-  
-  const handleAddPage = () => {
-    handleInsertPage(pages.length);
-  };
+    handleReorderPages(activeId, overId);
+  }, [handleReorderPages]);
 
   return (
     <DndContext 
@@ -57,7 +38,7 @@ export const FormBuilder = () => {
     >
       <PageList
         pages={pages}
-        addButton={{...addPageButton, onClick: handleAddPage}}
+        addButton={addButton}
         activeId={activeId}
         onSelect={setActiveId}
         onInsertPage={handleInsertPage}

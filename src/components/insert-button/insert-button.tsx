@@ -1,5 +1,17 @@
 import PlusIcon from '@/assets/icons/plus.svg?react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { memo } from 'react';
+
+// animations
+const ANIMATION_INITIAL = {opacity: 0, scale: 0.8, y: "-50%", x: "-50%"};
+const ANIMATION_ACTIVE = {opacity: 1, scale: 1, y: "-50%", x: "-50%"};
+const ANIMATION_EXIT = {opacity: 0, scale: 0.8, y: "-50%", x: "-50%"};
+const ANIMATION_TRANSITION = {
+  type: "spring",
+  stiffness: 500,
+  damping: 25,
+  duration: 0.2
+};
 
 interface Props {
   idx: number
@@ -8,7 +20,9 @@ interface Props {
   handleHover(idx: number | null): void;
 }
 
-export const InsertButton = ({ idx, hoverInsertIndex, handleHover, onClick }: Props) => {
+const InsertButtonComponent = ({ idx, hoverInsertIndex, handleHover, onClick }: Props) => {
+  const isVisible = hoverInsertIndex === idx + 1;
+  
   return (
     <div
       className="absolute right-0 top-0 bottom-0 h-full w-5 cursor-pointer z-20"
@@ -17,18 +31,13 @@ export const InsertButton = ({ idx, hoverInsertIndex, handleHover, onClick }: Pr
       onMouseLeave={() => handleHover(null)}
     >
       <AnimatePresence>
-        {hoverInsertIndex === idx + 1 && (
+        {isVisible && (
           <motion.div
             className="absolute top-1/2 left-1/2"
-            initial={{opacity: 0, scale: 0.8, y: "-50%", x: "-50%"}}
-            animate={{opacity: 1, scale: 1, y: "-50%", x: "-50%"}}
-            exit={{opacity: 0, scale: 0.8, y: "-50%", x: "-50%"}}
-            transition={{
-              type: "spring",
-              stiffness: 500,
-              damping: 25,
-              duration: 0.2
-            }}
+            initial={ANIMATION_INITIAL}
+            animate={ANIMATION_ACTIVE}
+            exit={ANIMATION_EXIT}
+            transition={ANIMATION_TRANSITION}
           >
             <button
               onClick={onClick}
@@ -41,4 +50,6 @@ export const InsertButton = ({ idx, hoverInsertIndex, handleHover, onClick }: Pr
       </AnimatePresence>
     </div>
   );
-}
+};
+
+export const InsertButton = memo(InsertButtonComponent);
