@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode, useState } from 'react';
+import { ComponentProps, FunctionComponent, ReactNode, SVGProps, useState } from 'react';
 import {
   Menu,
   MenuHandler,
@@ -7,21 +7,24 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { EllipsisVertical } from 'lucide-react';
-
-import SetFirstPageIcon from '@/assets/icons/flag.svg?react';
-import RenameIcon from '@/assets/icons/pencil-line.svg?react';
-import CopyIcon from '@/assets/icons/copy.svg?react';
-import DuplicateIcon from '@/assets/icons/duplicate.svg?react';
-import DeleteIcon from '@/assets/icons/trash.svg?react';
-import { Styles } from "@/types/core";
-import { cn } from "@/utils/markup";
+import SetFirstPageIcon  from '@/assets/icons/flag.svg?react';
+import RenameIcon        from '@/assets/icons/pencil-line.svg?react';
+import CopyIcon          from '@/assets/icons/copy.svg?react';
+import DuplicateIcon     from '@/assets/icons/duplicate.svg?react';
+import DeleteIcon        from '@/assets/icons/trash.svg?react';
+import { Styles }        from "@/types/core";
+import { cn }            from "@/utils/markup";
 
 interface ActionMenuItemProps extends Styles {
+  icon: FunctionComponent<SVGProps<SVGSVGElement>>;
+  iconColor?: string;
   children: ReactNode;
   onClick(): void;
 }
 
 const ActionMenuItem = ({
+  icon: Icon,
+  iconColor = "text-gray-700",
   children,
   onClick,
   className,
@@ -31,20 +34,20 @@ const ActionMenuItem = ({
   <MenuItem
     onPointerDown={e => e.stopPropagation()}
     onClick={onClick}
-    className={cn(className, 'flex items-center px-4 py-2 text-sm rounded-md transition')}
+    className={cn(
+      "flex items-center gap-2 p-0 text-sm font-medium rounded-md transition outline-none",
+      className
+    )}
   >
+    <Icon className={cn("w-4 h-4", iconColor)} />
     {children}
   </MenuItem>
 );
 
 type MTMenuListProps = ComponentProps<typeof MenuList>;
-type MTButtonProps = ComponentProps<typeof Button>;
+type MTButtonProps   = ComponentProps<typeof Button>;
 
-interface ActionMenuProps {
-  className?: string;
-}
-
-export const ActionMenu = ({ className = '' }: ActionMenuProps) => {
+export const ActionMenu = ({ className = "" }: { className?: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -54,65 +57,69 @@ export const ActionMenu = ({ className = '' }: ActionMenuProps) => {
         <Button
           {...({} as MTButtonProps)}
           variant="text"
-          className={cn(className, 'p-1 outline-none rounded-md hover:bg-gray-100 transition shadow-none min-w-0')}
+          className={cn(
+            "p-1 outline-none rounded-md hover:bg-gray-100 transition shadow-none min-w-0",
+            className
+          )}
           onPointerDown={e => e.stopPropagation()}
           onClick={e => {
             e.stopPropagation();
-            setIsMenuOpen(open => !open);
+            setIsMenuOpen(o => !o);
           }}
         >
-          <EllipsisVertical className="w-4 h-5 text-gray-600"/>
+          <EllipsisVertical className="w-4 h-5 text-gray-600" />
         </Button>
       </MenuHandler>
 
       <MenuList
         {...({} as MTMenuListProps)}
-        className="bg-white rounded-xl shadow-xl p-2 min-w-[12rem] z-50"
-        onPointerDown={e => e.stopPropagation()}
+        className="bg-white rounded-xl shadow-light min-w-[215px] z-50"
       >
-        <div className="px-4 py-2 text-sm font-semibold text-gray-700">
+        <div className="p-3 bg-gray-200 rounded-t-xl border-b-[0.5px] border-gray-300 text-base font-semibold text-dark outline-0">
           Settings
         </div>
 
-        <ActionMenuItem onClick={() => {
-          closeMenu();
-        }}>
-          <SetFirstPageIcon className="w-4 h-4 mr-3 text-gray-600"/>
-          Set as first page
-        </ActionMenuItem>
+        <div className="flex flex-col p-3 gap-3 outline-0">
+          <ActionMenuItem
+            icon={SetFirstPageIcon}
+            iconColor="text-blue"
+            onClick={closeMenu}
+          >
+            Set as first page
+          </ActionMenuItem>
 
-        <ActionMenuItem onClick={() => {
-          closeMenu();
-        }}>
-          <RenameIcon className="w-4 h-4 mr-3 text-gray-600"/>
-          Rename
-        </ActionMenuItem>
+          <ActionMenuItem
+            icon={RenameIcon}
+            onClick={closeMenu}
+          >
+            Rename
+          </ActionMenuItem>
 
-        <ActionMenuItem onClick={() => {
-          closeMenu();
-        }}>
-          <CopyIcon className="w-4 h-4 mr-3 text-gray-600"/>
-          Copy
-        </ActionMenuItem>
+          <ActionMenuItem
+            icon={CopyIcon}
+            onClick={closeMenu}
+          >
+            Copy
+          </ActionMenuItem>
 
-        <ActionMenuItem onClick={() => {
-          closeMenu();
-        }}>
-          <DuplicateIcon className="w-4 h-4 mr-3 text-gray-600"/>
-          Duplicate
-        </ActionMenuItem>
+          <ActionMenuItem
+            icon={DuplicateIcon}
+            onClick={closeMenu}
+          >
+            Duplicate
+          </ActionMenuItem>
 
-        <hr className="my-2 border-t border-gray-200"/>
+          <hr className="border-t-[0.5px] border-gray-300" />
 
-        <ActionMenuItem
-          className="text-red-600 hover:bg-red-100"
-          onClick={() => {
-            closeMenu();
-          }}
-        >
-          <DeleteIcon className="w-4 h-4 mr-3 text-gray-600"/>
-          Delete
-        </ActionMenuItem>
+          <ActionMenuItem
+            icon={DeleteIcon}
+            iconColor="text-red"
+            className="hover:bg-red-100"
+            onClick={closeMenu}
+          >
+            Delete
+          </ActionMenuItem>
+        </div>
       </MenuList>
     </Menu>
   );

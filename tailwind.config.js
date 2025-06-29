@@ -11,6 +11,7 @@ export default {
       },
       colors: {
         gray: {
+          200: '#FAFBFC',
           300: '#E1E1E1',
           400: '#C0C0C0',
           500: '#8C93A1',

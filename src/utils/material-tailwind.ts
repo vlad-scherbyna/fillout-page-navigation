@@ -38,12 +38,11 @@ const theme = {
     styles: {
       base: {
         menu: {
-          p: "py-2",
-          border: "border border-gray-200",
+          p: "p-0",
+          border: "border-[0.5px] border-gray-300",
           borderRadius: "rounded-xl",
           boxShadow: "shadow-xl",
           fontSize: "text-sm",
-          color: "text-gray-700",
           outline: "outline-none",
         },
         item: {
@@ -52,7 +51,7 @@ const theme = {
             width: "w-full",
             pt: "pt-[9px]",
             pb: "pb-[9px]",
-            px: "px-4",
+            px: "px-0",
             borderRadius: "rounded-md",
             textAlign: "text-start",
             outline: "outline-none",
